@@ -23,7 +23,7 @@ jobs:
 
       - name: Run Preprocessing Script
         run: |
-          python preprocessing/automate_Pradipta-Rafa-Taisir.py
+          python preprocessing/automate_Pradipta-Rafa-Taisir.py namadataset_raw/car_prices.csv preprocessing/car_prices_clean.csv
 
       - name: Upload Cleaned Dataset
         uses: actions/upload-artifact@v3

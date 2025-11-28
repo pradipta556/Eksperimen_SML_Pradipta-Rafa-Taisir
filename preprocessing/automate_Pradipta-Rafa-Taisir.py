@@ -1,26 +1,22 @@
-import os
+import sys
 import pandas as pd
+import os
 
-RAW_FILE = "car_prices.csv"
-OUTPUT_FILE = "car_prices_clean.csv"
-
-def load_dataset():
-    if not os.path.exists(RAW_FILE):
-        raise FileNotFoundError(f"File tidak ditemukan: {RAW_FILE}")
-    return pd.read_csv(RAW_FILE, engine="python", on_bad_lines="skip")
+def load_dataset(input_path):
+    if not os.path.exists(input_path):
+        raise FileNotFoundError(f"File tidak ditemukan: {input_path}")
+    return pd.read_csv(input_path, engine="python", on_bad_lines="skip")
 
 def clean_dataset(df):
     # Hapus duplikasi
     df = df.drop_duplicates()
 
     important_cols = ["sellingprice", "odometer", "make", "model", "year"]
-
     df = df.dropna(subset=important_cols)
 
-    # Isi missing value lain otomatis
     df = df.fillna(method="ffill").fillna(method="bfill")
 
-    # Convert tipe data numerik
+    # Convert ke numeric
     numeric_cols = ["sellingprice", "odometer", "year", "mmr", "condition"]
     for col in numeric_cols:
         if col in df.columns:
@@ -32,19 +28,26 @@ def clean_dataset(df):
 
     return df
 
-def save_dataset(df):
-    df.to_csv(OUTPUT_FILE, index=False)
-    print(f"Dataset bersih berhasil disimpan sebagai: {OUTPUT_FILE}")
+def save_dataset(df, output_path):
+    df.to_csv(output_path, index=False)
+    print(f"Dataset bersih berhasil disimpan sebagai: {output_path}")
 
 def main():
+    if len(sys.argv) != 3:
+        print("Usage: python automate.py <input.csv> <output.csv>")
+        sys.exit(1)
+
+    input_path = sys.argv[1]
+    output_path = sys.argv[2]
+
     print("=== Memuat dataset ===")
-    df = load_dataset()
-    
+    df = load_dataset(input_path)
+
     print("=== Membersihkan dataset ===")
     df_clean = clean_dataset(df)
-    
+
     print("=== Menyimpan dataset ===")
-    save_dataset(df_clean)
+    save_dataset(df_clean, output_path)
 
     print("=== Selesai! ===")
 
