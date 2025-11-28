@@ -1,0 +1,32 @@
+name: Preprocess Dataset
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  preprocess:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install Dependencies
+        run: |
+          pip install pandas numpy scikit-learn
+
+      - name: Run Preprocessing Script
+        run: |
+          python preprocessing/automate_Pradipta-Rafa-Taisir.py
+
+      - name: Upload Cleaned Dataset
+        uses: actions/upload-artifact@v3
+        with:
+          name: cleaned-dataset
+          path: preprocessing/car_prices_clean.csv
