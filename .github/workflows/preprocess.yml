@@ -23,10 +23,12 @@ jobs:
 
       - name: Run Preprocessing Script
         run: |
-          python preprocessing/automate_Pradipta-Rafa-Taisir.py namadataset_raw/car_prices.csv preprocessing/car_prices_clean.csv
+          python preprocessing/automate_Pradipta-Rafa-Taisir.py \
+            AI_Impact_on_Jobs_2030_raw/AI_Impact_on_Jobs_2030_raw.csv \
+            preprocessing/AI_Impact_on_Jobs_2030_preprocessing/AI_Impact_on_Jobs_2030_clean.csv
 
       - name: Upload Cleaned Dataset
         uses: actions/upload-artifact@v4
         with:
           name: cleaned-dataset
-          path: preprocessing/car_prices_clean.csv
+          path: preprocessing/AI_Impact_on_Jobs_2030_preprocessing/AI_Impact_on_Jobs_2030_clean.csv
